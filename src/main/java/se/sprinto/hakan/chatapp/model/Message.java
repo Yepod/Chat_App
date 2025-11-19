@@ -9,6 +9,7 @@ public class Message {
     private String text;
     private LocalDateTime timestamp;
 
+
     public Message(int userId, String text, LocalDateTime timestamp) {
         this.userId = userId;
         this.text = text;

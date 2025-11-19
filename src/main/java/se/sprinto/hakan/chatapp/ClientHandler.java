@@ -1,9 +1,6 @@
 package se.sprinto.hakan.chatapp;
 
-import se.sprinto.hakan.chatapp.dao.MessageDAO;
-import se.sprinto.hakan.chatapp.dao.MessageListDAO;
-import se.sprinto.hakan.chatapp.dao.UserDAO;
-import se.sprinto.hakan.chatapp.dao.UserListDAO;
+import se.sprinto.hakan.chatapp.dao.*;
 import se.sprinto.hakan.chatapp.model.Message;
 import se.sprinto.hakan.chatapp.model.User;
 
@@ -21,8 +18,8 @@ public class ClientHandler implements Runnable {
     private PrintWriter out;
     private User user;
 
-    private final UserDAO userDAO = new UserListDAO();
-    private final MessageDAO messageDAO = new MessageListDAO();
+    private final UserDAO userDAO = new UserDatabaseDAO();
+    private final MessageDAO messageDAO = new MessageDatabaseDAO();
 
     ClientHandler(Socket socket, ChatServer server) {
         this.socket = socket;
