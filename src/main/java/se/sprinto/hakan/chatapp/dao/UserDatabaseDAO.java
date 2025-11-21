@@ -1,5 +1,6 @@
 package se.sprinto.hakan.chatapp.dao;
 
+import se.sprinto.hakan.chatapp.model.Message;
 import se.sprinto.hakan.chatapp.model.User;
 import se.sprinto.hakan.chatapp.util.DatabaseUtil;
 
@@ -36,7 +37,7 @@ public class UserDatabaseDAO implements UserDAO {
     public User login(String username, String password) {
         String sql =
                 """
-                SELECT user.user_id, username, password, message.message_id, message.text FROM user 
+                SELECT text, message.timestamp, user.user_id, username, password FROM user
                 LEFT JOIN message
                 ON user.user_id = message.user_id
                 WHERE username = ?
@@ -49,6 +50,19 @@ public class UserDatabaseDAO implements UserDAO {
             try(ResultSet rs = pstmt.executeQuery()) {
                 if(rs.next()) {
                     User user = rowToUser(rs);
+                    user.addMessage(new Message(
+                            rs.getInt("user_id"),
+                            rs.getString("text"),
+                            rs.getTimestamp("timestamp").toLocalDateTime()
+                    ));
+
+                    while(rs.next()) {
+                        user.addMessage(new Message(
+                                rs.getInt("user_id"),
+                                rs.getString("text"),
+                                rs.getTimestamp("timestamp").toLocalDateTime()
+                        ));
+                    }
 
                     if(user.getPassword().equals(password)) {
                         return user;
@@ -89,9 +103,9 @@ public class UserDatabaseDAO implements UserDAO {
     }
 
     private User rowToUser(ResultSet rs) throws SQLException {
-        int id = rs.getInt("user_id");
+        int userId = rs.getInt("user_id");
         String username = rs.getString("username");
         String password = rs.getString("password");
-        return new User(id, username, password);
+        return new User(userId, username, password);
     }
 }

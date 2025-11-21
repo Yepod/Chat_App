@@ -3,5 +3,6 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/se/sprinto/hakan/chatapp/dao/MessageDatabaseDAO.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/se/sprinto/hakan/chatapp/dao/UserDatabaseDAO.java" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/src/test/java/se/sprinto/hakan/chatapp/TestingEnvironment.java" dialect="GenericSQL" />
   </component>
 </project>
