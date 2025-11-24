@@ -33,7 +33,7 @@ public class TestingEnvironment {
                     "message_id INT PRIMARY KEY AUTO_INCREMENT," +
                     "user_id INT NOT NULL," +
                     "text TEXT NOT NULL," +
-                    "timestamp TIMESTAMP," +
+                    "timestamp TIMESTAMP NOT NULL," +
                     "FOREIGN KEY (user_id) REFERENCES user(user_id)" +
                     ");");
         }

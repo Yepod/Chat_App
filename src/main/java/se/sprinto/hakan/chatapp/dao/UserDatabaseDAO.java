@@ -81,27 +81,6 @@ public class UserDatabaseDAO implements UserDAO {
         return null;
     }
 
-    public User findByUsername(String username) {
-        String sql = "SELECT user_id, username, password FROM user WHERE username = ?";
-
-        try (Connection connection = DatabaseUtil.getInstance().getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            pstmt.setString(1, username);
-            try(ResultSet rs = pstmt.executeQuery()) {
-
-                if(rs.next()) {
-                    return rowToUser(rs);
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
-
     private User rowToUser(ResultSet rs) throws SQLException {
         int userId = rs.getInt("user_id");
         String username = rs.getString("username");
