@@ -22,20 +22,25 @@ public class TestingEnvironment {
         // SETTING UP CONNECTION TO H2
         Connection connection = DatabaseUtil.getInstance().getConnection();
 
-        try(Statement stmt = connection.createStatement()) {
+        try (Statement stmt = connection.createStatement()) {
             // SKAPAR TABELLERNA (ARRANGE)
-            stmt.execute("CREATE TABLE user (" +
-                    "user_id INT PRIMARY KEY AUTO_INCREMENT," +
-                    "username VARCHAR(20) NOT NULL," +
-                    "password VARCHAR(20) NOT NULL" + ");");
+            stmt.execute("""
+                    CREATE TABLE user (
+                    user_id INT PRIMARY KEY AUTO_INCREMENT,
+                    username VARCHAR(20) NOT NULL,
+                    password VARCHAR(20) NOT NULL
+                    )
+                    """);
 
-            stmt.execute("CREATE TABLE message (" +
-                    "message_id INT PRIMARY KEY AUTO_INCREMENT," +
-                    "user_id INT NOT NULL," +
-                    "text TEXT NOT NULL," +
-                    "timestamp TIMESTAMP NOT NULL," +
-                    "FOREIGN KEY (user_id) REFERENCES user(user_id)" +
-                    ");");
+            stmt.execute("""
+                    CREATE TABLE message (
+                    message_id INT PRIMARY KEY AUTO_INCREMENT,
+                    user_id INT NOT NULL,
+                    text TEXT NOT NULL ,
+                    timestamp TIMESTAMP NOT NULL,
+                    FOREIGN KEY (user_id) REFERENCES user(user_id)
+                    )
+                    """);
         }
     }
 
