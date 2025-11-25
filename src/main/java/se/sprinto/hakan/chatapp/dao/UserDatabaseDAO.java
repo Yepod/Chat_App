@@ -37,47 +37,47 @@ public class UserDatabaseDAO implements UserDAO {
     public User login(String username, String password) {
         String sql =
                 """
-                SELECT text, message.timestamp, user.user_id, username, password FROM user
-                LEFT JOIN message
-                ON user.user_id = message.user_id
-                WHERE username = ?
-                """;
+                        SELECT message.message_id, text, message.timestamp,
+                               user.user_id, username, password FROM user
+                        LEFT JOIN message
+                        ON user.user_id = message.user_id
+                        WHERE username = ? AND password = ?
+                        """;
 
-        try(Connection connection = DatabaseUtil.getInstance().getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        try (Connection connection = DatabaseUtil.getInstance().getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
             pstmt.setString(1, username);
-            try(ResultSet rs = pstmt.executeQuery()) {
-                if(rs.next()) {
-                    User user = rowToUser(rs);
-                    user.addMessage(new Message(
-                            rs.getInt("user_id"),
-                            rs.getString("text"),
-                            rs.getTimestamp("timestamp").toLocalDateTime()
-                    ));
+            pstmt.setString(2, password);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                User user = null;
 
-                    while(rs.next()) {
-                        user.addMessage(new Message(
+                while (rs.next()) {
+                    if (user == null) {
+                        user = new User(
+                                rs.getInt("user_id"),
+                                rs.getString("username"),
+                                rs.getString("password")
+                        );
+                    }
+
+                    int messageId = rs.getInt("message_id");
+                    if (!rs.wasNull()) {
+                        Message message = new Message(
                                 rs.getInt("user_id"),
                                 rs.getString("text"),
                                 rs.getTimestamp("timestamp").toLocalDateTime()
-                        ));
+                        );
+                        user.addMessage(message);
                     }
-
-                    if(user.getPassword().equals(password)) {
-                        return user;
-                    } else {
-                        return null;
-                    }
-                } else {
-                    return null;
                 }
+
+                return user;
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
