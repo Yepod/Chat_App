@@ -54,11 +54,7 @@ public class UserDatabaseDAO implements UserDAO {
 
                 while (rs.next()) {
                     if (user == null) {
-                        user = new User(
-                                rs.getInt("user_id"),
-                                rs.getString("username"),
-                                rs.getString("password")
-                        );
+                        user = rowToUser(rs);
                     }
 
                     int messageId = rs.getInt("message_id");
